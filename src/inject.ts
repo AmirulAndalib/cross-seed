@@ -302,7 +302,9 @@ async function injectFromStalledTorrent({
 			});
 			await getClient()!.recheckTorrent(meta.infoHash);
 			summary.RECHECKING.add(meta.infoHash);
-			getClient()!.resumeInjection(meta.infoHash, { checkOnce: false });
+			getClient()!.resumeInjection(meta.infoHash, stalledDecision, {
+				checkOnce: false,
+			});
 			summary.RESUMING.add(meta.infoHash);
 		} else {
 			logger.warn({
@@ -349,6 +351,13 @@ async function injectionAlreadyExists({
 	matches,
 	filePathLog,
 }: InjectionAftermath) {
+	const { matchMode } = getRuntimeConfig();
+	const existsDecision =
+		matchMode === MatchMode.PARTIAL
+			? Decision.MATCH_PARTIAL
+			: matchMode === MatchMode.RISKY
+				? Decision.MATCH_SIZE_ONLY
+				: Decision.MATCH;
 	const result = await getClient()!.isTorrentComplete(meta.infoHash);
 	let isComplete = result.orElse(false);
 	const anyFullMatch = matches.some(
@@ -363,7 +372,7 @@ async function injectionAlreadyExists({
 		});
 		await getClient()!.recheckTorrent(meta.infoHash);
 		summary.RECHECKING.add(meta.infoHash);
-		getClient()!.resumeInjection(meta.infoHash, {
+		getClient()!.resumeInjection(meta.infoHash, existsDecision, {
 			checkOnce: false,
 		});
 		summary.RESUMING.add(meta.infoHash);
@@ -374,7 +383,7 @@ async function injectionAlreadyExists({
 		});
 		await getClient()!.recheckTorrent(meta.infoHash);
 		summary.RECHECKING.add(meta.infoHash);
-		getClient()!.resumeInjection(meta.infoHash, {
+		getClient()!.resumeInjection(meta.infoHash, existsDecision, {
 			checkOnce: false,
 		});
 		summary.RESUMING.add(meta.infoHash);
@@ -385,7 +394,7 @@ async function injectionAlreadyExists({
 			message: `${progress} Unable to inject ${filePathLog} - ${chalk.yellow(injectionResult)}${isComplete ? "" : " (incomplete)"}`,
 		});
 		if (!isComplete) {
-			getClient()!.resumeInjection(meta.infoHash, {
+			getClient()!.resumeInjection(meta.infoHash, existsDecision, {
 				checkOnce: true,
 			});
 			summary.RESUMING.add(meta.infoHash);
@@ -538,7 +547,7 @@ async function injectSavedTorrent(
 }
 
 function logInjectSummary(summary: InjectSummary, flatLinking: boolean) {
-	const { matchMode } = getRuntimeConfig();
+	const { skipRecheck } = getRuntimeConfig();
 	const incompleteMsg = `${chalk.bold.yellow(summary.ALREADY_EXISTS)} existed in client${
 		summary.INCOMPLETE_CANDIDATES
 			? chalk.dim(` (${summary.INCOMPLETE_CANDIDATES} were incomplete)`)
@@ -580,7 +589,7 @@ function logInjectSummary(summary: InjectSummary, flatLinking: boolean) {
 	}
 
 	if (
-		matchMode === MatchMode.SAFE ||
+		!skipRecheck ||
 		summary.PARTIAL_MATCHES ||
 		summary.RECHECKING.size ||
 		summary.RESUMING.size ||

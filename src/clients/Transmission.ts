@@ -254,10 +254,11 @@ export default class Transmission implements TorrentClient {
 
 	async resumeInjection(
 		infoHash: string,
+		decision: DecisionAnyMatch,
 		options: { checkOnce: boolean },
 	): Promise<void> {
 		let sleepTime = resumeSleepTime;
-		const maxRemainingBytes = getMaxRemainingBytes();
+		const maxRemainingBytes = getMaxRemainingBytes(decision);
 		const stopTime = getResumeStopTime();
 		let stop = false;
 		while (Date.now() < stopTime) {
@@ -344,7 +345,9 @@ export default class Transmission implements TorrentClient {
 					labels: [TORRENT_TAG],
 				},
 			);
-			this.resumeInjection(newTorrent.infoHash, { checkOnce: false });
+			this.resumeInjection(newTorrent.infoHash, decision, {
+				checkOnce: false,
+			});
 		} catch (e) {
 			return InjectionResult.FAILURE;
 		}
