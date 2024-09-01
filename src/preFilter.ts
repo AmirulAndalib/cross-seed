@@ -21,6 +21,7 @@ import {
 	filesWithExt,
 	getLogString,
 	getMediaType,
+	getNewestFileAge,
 	hasExt,
 	humanReadableDate,
 	nMsAgo,
@@ -253,7 +254,8 @@ type TimestampDataSql = {
 };
 
 export async function filterTimestamps(searchee: Searchee): Promise<boolean> {
-	const { excludeOlder, excludeRecentSearch } = getRuntimeConfig();
+	const { excludeOlder, excludeRecentSearch, seasonFromEpisodes } =
+		getRuntimeConfig();
 	const enabledIndexers = await getEnabledIndexers();
 	const mediaType = getMediaType(searchee);
 	const timestampDataSql: TimestampDataSql = (await db("searchee")
@@ -291,6 +293,14 @@ export async function filterTimestamps(searchee: Searchee): Promise<boolean> {
 
 	const { earliest_first_search, latest_first_search, earliest_last_search } =
 		timestampDataSql;
+	if (
+		seasonFromEpisodes &&
+		!searchee.infoHash &&
+		!searchee.path &&
+		earliest_last_search < getNewestFileAge(searchee.files)
+	) {
+		return true;
+	}
 
 	const skipBefore = excludeOlder
 		? nMsAgo(excludeOlder)
