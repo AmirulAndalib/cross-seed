@@ -455,7 +455,7 @@ async function findSearchableTorrents(): Promise<{
 	return { searchees: finalSearchees, hashesToExclude };
 }
 
-export async function main(): Promise<void> {
+export async function runBulkSearch(): Promise<void> {
 	const { outputDir, linkDir } = getRuntimeConfig();
 	const { searchees, hashesToExclude } = await findSearchableTorrents();
 

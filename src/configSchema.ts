@@ -180,9 +180,15 @@ export const VALIDATION_SCHEMA = z
 			.number()
 			.positive()
 			.lte(65535)
-			.or(z.literal(false).transform(() => null))
-			.nullish(),
-		host: z.string().ip().nullish(),
+			.or(z.literal(false))
+			.or(z.literal(null))
+			.or(z.literal(undefined))
+			.transform((x) => x ?? undefined),
+		host: z
+			.string()
+			.ip()
+			.nullish()
+			.transform((x) => x ?? undefined),
 		rssCadence: z
 			.string()
 			.min(1, { message: ZodErrorMessages.emptyString })

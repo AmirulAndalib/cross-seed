@@ -1,7 +1,7 @@
 import ms from "ms";
 import { db } from "./db.js";
 import { injectSavedTorrents } from "./inject.js";
-import { main, scanRssFeeds } from "./pipeline.js";
+import { runBulkSearch, scanRssFeeds } from "./pipeline.js";
 import { exitOnCrossSeedErrors } from "./errors.js";
 import { Label, logger } from "./logger.js";
 import { getRuntimeConfig } from "./runtimeConfig.js";
@@ -43,7 +43,8 @@ function getJobs(): Job[] {
 	const jobs: Job[] = [];
 	if (torznab.length > 0) {
 		if (rssCadence) jobs.push(new Job("rss", rssCadence, scanRssFeeds));
-		if (searchCadence) jobs.push(new Job("search", searchCadence, main));
+		if (searchCadence)
+			jobs.push(new Job("search", searchCadence, runBulkSearch));
 		jobs.push(new Job("updateIndexerCaps", ms("1 day"), updateCaps));
 	}
 	if (action === Action.INJECT) {

@@ -303,7 +303,7 @@ async function handleRequest(
 	}
 }
 
-export function serve(port: number, host: string | undefined): void {
+export function serve(port?: number, host?: string): void {
 	if (port) {
 		const server = http.createServer(handleRequest);
 		server.listen(port, host);

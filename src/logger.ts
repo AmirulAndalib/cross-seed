@@ -3,7 +3,7 @@ import stripAnsi from "strip-ansi";
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import { appDir, createAppDir } from "./configuration.js";
-import { getRuntimeConfig, RuntimeConfig } from "./runtimeConfig.js";
+import { getRuntimeConfig } from "./runtimeConfig.js";
 
 export enum Label {
 	QBITTORRENT = "qbittorrent",
@@ -49,7 +49,10 @@ function redactUrlPassword(message, urlStr) {
 	return message;
 }
 
-function redactMessage(message: string | unknown, options?: RuntimeConfig) {
+function redactMessage(
+	message: string | unknown,
+	options: Record<string, unknown>,
+) {
 	if (typeof message !== "string") {
 		return message;
 	}
@@ -101,7 +104,7 @@ export function logOnce(cacheKey: string, cb: () => void, ttl?: number) {
 	}
 }
 
-export function initializeLogger(options: RuntimeConfig): void {
+export function initializeLogger(options: Record<string, unknown>): void {
 	createAppDir();
 	logger = winston.createLogger({
 		level: "info",
