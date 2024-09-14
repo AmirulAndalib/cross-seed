@@ -315,11 +315,7 @@ export const VALIDATION_SCHEMA = z
 			.string()
 			.min(1, ZodErrorMessages.emptyString)
 			.transform(transformDurationString)
-			.nullish()
-			.refine(
-				(cadence) => process.env.DEV || !cadence || cadence >= ms("1h"),
-				ZodErrorMessages.searchCadenceUnsupported,
-			),
+			.nullish(),
 		snatchTimeout: z
 			.string()
 			.min(1, ZodErrorMessages.emptyString)
