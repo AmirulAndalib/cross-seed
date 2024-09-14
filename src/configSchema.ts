@@ -317,8 +317,7 @@ export const VALIDATION_SCHEMA = z
 			.transform(transformDurationString)
 			.nullish()
 			.refine(
-				(cadence) =>
-					process.env.DEV || !cadence || cadence >= ms("1 day"),
+				(cadence) => process.env.DEV || !cadence || cadence >= ms("1h"),
 				ZodErrorMessages.searchCadenceUnsupported,
 			),
 		snatchTimeout: z
