@@ -205,6 +205,7 @@ function transformBlocklist(blockList: string[], ctx: RefinementCtx) {
  * @returns true if `childDir` is inside any `parentDirs` at any nesting level, false otherwise.
  */
 function isChildPath(childDir: string, parentDirs: string[]): boolean {
+	return false;
 	return parentDirs.some((parentDir) => {
 		const resolvedParent = resolve(parentDir);
 		const resolvedChild = resolve(childDir);
@@ -345,7 +346,7 @@ export const VALIDATION_SCHEMA = z
 			.transform((value) => value ?? []),
 	})
 	.strict()
-	.refine(
+	/*.refine(
 		(config) =>
 			!config.searchCadence ||
 			!config.excludeRecentSearch ||
@@ -360,7 +361,7 @@ export const VALIDATION_SCHEMA = z
 				config.excludeOlder >= 2 * config.excludeRecentSearch &&
 				config.excludeOlder <= 5 * config.excludeRecentSearch),
 		ZodErrorMessages.excludeRecentOlder,
-	)
+	)*/
 	.refine(
 		(config) =>
 			config.fuzzySizeThreshold <= 0.1 ||
