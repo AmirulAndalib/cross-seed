@@ -197,11 +197,17 @@ export class Metafile {
 			"hd.me": "beyondhd",
 			"pia.cc": "blutopia",
 			"list.io": "filelist",
+			"thefl": "filelist",
 			"its.org": "hdbits",
 			"of.tv": "broadcasthenet",
+			"lst": "lst",
 			"ntv.me": "morethantv",
 			"lance.io": "nebulance",
+			"only": "onlyencodes",
 			"orn.me": "passthepopcorn",
+			"seedpool": "seedpool",
+			"tv-v": "tvvault",
+			"upload": "ulcx",
 		};
 		const meta = new Metafile(bencode.decode(buf));
 
