@@ -4,6 +4,7 @@ import {
 	DecisionAnyMatch,
 	InjectionResult,
 	MatchMode,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	VIDEO_DISC_EXTENSIONS,
 } from "../constants.js";
 import { getRuntimeConfig } from "../runtimeConfig.js";
@@ -15,6 +16,7 @@ import Deluge from "./Deluge.js";
 import { Result } from "../Result.js";
 import { Label } from "../logger.js";
 import ms from "ms";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { hasExt } from "../utils.js";
 
 let activeClient: TorrentClient | null = null;
@@ -85,7 +87,9 @@ export function getClient(): TorrentClient | null {
 }
 
 export function shouldRecheck(
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	searchee: Searchee,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	decision: DecisionAnyMatch,
 ): boolean {
 	return false; /*
