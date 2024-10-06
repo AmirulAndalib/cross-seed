@@ -92,7 +92,7 @@ function withCrossSeedRuntime(
 			setRuntimeConfig(runtimeConfig);
 			initializePushNotifier();
 			await db.migrate.latest();
-			await doStartupValidation();
+			if (validateConfig) await doStartupValidation();
 			await run(runtimeConfig);
 		} catch (e) {
 			exitOnCrossSeedErrors(e);
@@ -144,7 +144,9 @@ program
 	.command("test-notification")
 	.description("Send a test notification")
 	.addOption(notificationWebhookUrlOption)
-	.action(withCrossSeedRuntime(sendTestNotification));
+	.action(
+		withCrossSeedRuntime(sendTestNotification, { validateConfig: false }),
+	);
 
 program
 	.command("diff")
