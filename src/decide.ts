@@ -522,10 +522,10 @@ async function assessAndSaveResults(
 	if (assessment.metaCached && assessment.metafile) {
 		guidInfoHashMap.set(guid, assessment.metafile.infoHash);
 		await db.transaction(async (trx) => {
-			const { id } = await trx("searchee")
+			const { id } = (await trx("searchee")
 				.select("id")
 				.where({ name: searchee.title })
-				.first();
+				.first())!;
 			await trx("decision")
 				.insert({
 					searchee_id: id,
@@ -591,7 +591,7 @@ export async function assessCandidateCaching(
 ): Promise<ResultAssessment> {
 	const { name, guid, link, tracker } = candidate;
 
-	const cacheEntry = await db("decision")
+	const cacheEntry = (await db("decision")
 		.select({
 			id: "decision.id",
 			infoHash: "decision.info_hash",
@@ -601,7 +601,7 @@ export async function assessCandidateCaching(
 		})
 		.join("searchee", "decision.searchee_id", "searchee.id")
 		.where({ name: searchee.title, guid })
-		.first();
+		.first())!;
 	const metaInfoHash = await guidLookup(guid, link, guidInfoHashMap);
 	const metaOrCandidate = metaInfoHash
 		? existsInTorrentCache(metaInfoHash)

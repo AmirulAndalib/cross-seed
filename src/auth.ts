@@ -16,7 +16,7 @@ export async function getApiKey(): Promise<string> {
 	const { apiKey: runtimeConfigApiKey } = getRuntimeConfig();
 	if (runtimeConfigApiKey) return runtimeConfigApiKey;
 
-	const { apikey } = await db("settings").select("apikey").first();
+	const { apikey } = (await db("settings").select("apikey").first())!;
 	if (!apikey) return resetApiKey();
 	return apikey;
 }

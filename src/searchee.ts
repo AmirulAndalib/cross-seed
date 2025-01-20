@@ -280,6 +280,7 @@ export async function updateSearcheeClientDB(
 		})),
 		async (batch) => {
 			await memDB("torrent")
+				// @ts-expect-error knex doesn't support per-db types so memdb types are wrong
 				.insert(batch)
 				.onConflict("info_hash")
 				.merge();

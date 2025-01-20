@@ -228,12 +228,12 @@ function createCommandWithSharedOptions(name: string, description: string) {
 		)
 		.option(
 			"-x, --exclude-older <cutoff>",
-			"Exclude torrents first seen more than n minutes ago. Bypasses the -a flag.",
+			"Exclude torrents first seen more than this long ago. Bypasses the -a flag.",
 			fileConfig.excludeOlder,
 		)
 		.option(
 			"-r, --exclude-recent-search <cutoff>",
-			"Exclude torrents which have been searched more recently than n minutes ago. Bypasses the -a flag.",
+			"Exclude torrents which have been searched more recently than this long ago. Bypasses the -a flag.",
 			fileConfig.excludeRecentSearch,
 		)
 		.option(

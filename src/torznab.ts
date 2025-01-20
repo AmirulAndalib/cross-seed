@@ -433,7 +433,7 @@ export async function* rssPager(
 		}
 	}
 	await db("rss")
-		.insert({ indexer_id: indexer.id, last_seen_guid: newLastSeenGuid })
+		.insert({ indexer_id: indexer.id, last_seen_guid: newLastSeenGuid! })
 		.onConflict("indexer_id")
 		.merge(["last_seen_guid"]);
 	if (i >= maxPage) {
@@ -554,7 +554,7 @@ export async function syncWithDb() {
 			.insert(
 				inConfigButNotInDb.map((url) => ({
 					url: sanitizeUrl(url),
-					apikey: getApikey(url),
+					apikey: getApikey(url)!,
 					active: true,
 				})),
 			)
@@ -841,6 +841,7 @@ async function getAndLogIndexers(
 			"indexer.id",
 			enabledIndexers.map((i) => i.id),
 		)
+		// @ts-expect-error too complicated for knex types
 		.andWhere({ name })
 		.select({
 			indexerId: "indexer.id",
