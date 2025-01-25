@@ -47,8 +47,7 @@ declare module "knex/types/tables.js" {
 	}
 
 	interface Settings {
-		id: number;
-		apikey: string;
+		settings_json: string;
 	}
 
 	interface Timestamp {
@@ -78,11 +77,7 @@ declare module "knex/types/tables.js" {
 			Searchee,
 			Omit<Searchee, "id" | "first_searched" | "last_searched">
 		>;
-		settings: Knex.CompositeTableType<
-			Settings,
-			Pick<Settings, "id">,
-			Omit<Settings, "id">
-		>;
+		settings: Settings;
 		timestamp: Knex.CompositeTableType<
 			Timestamp,
 			Timestamp,

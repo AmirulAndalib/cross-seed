@@ -11,7 +11,6 @@ const packageDotJson = require("../package.json");
 
 export interface FileConfig {
 	action?: Action;
-	pconfigVersion?: number;
 	delay?: number;
 	includeSingleEpisodes?: boolean;
 	outputDir?: string;
