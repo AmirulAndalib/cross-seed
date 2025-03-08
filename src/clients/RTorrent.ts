@@ -552,8 +552,8 @@ export default class RTorrent implements TorrentClient {
 
 		await saveWithLibTorrentResume(meta, torrentFilePath, basePath);
 
-		const toRecheck = shouldRecheck(searchee, decision);
-		const loadType = toRecheck ? "load" : "load.start";
+		//const toRecheck = shouldRecheck(searchee, decision);
+		const loadType = "load.normal";
 
 		for (let i = 0; i < 5; i++) {
 			try {
@@ -564,11 +564,11 @@ export default class RTorrent implements TorrentClient {
 					`d.custom1.set="${TORRENT_TAG}"`,
 					`d.custom.set=addtime,${Math.round(Date.now() / 1000)}`,
 				]);
-				if (toRecheck) {
-					this.resumeInjection(meta.infoHash, decision, {
-						checkOnce: false,
-					});
-				}
+				// if (toRecheck) {
+				// 	this.resumeInjection(meta.infoHash, decision, {
+				// 		checkOnce: false,
+				// 	});
+				// }
 				break;
 			} catch (e) {
 				await wait(1000 * Math.pow(2, i));
